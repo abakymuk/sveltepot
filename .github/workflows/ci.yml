@@ -30,16 +30,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
       - name: Use Node from .nvmrc
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
 
       - name: Derive cache prefix
         id: derive-cache-prefix
@@ -54,13 +54,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - run: pnpm install --frozen-lockfile
       - name: eslint
         run: pnpm lint
@@ -71,13 +71,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - run: pnpm install --frozen-lockfile
       - name: svelte-check
         run: pnpm typecheck
@@ -88,13 +88,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - run: pnpm install --frozen-lockfile
       - name: vite build
         run: pnpm build
