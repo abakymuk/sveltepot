@@ -38,7 +38,9 @@ pnpm build
 
 ## Документация
 
-Подробная документация по настройке и использованию проекта находится в [docs/SETUP.md](docs/SETUP.md).
+эт о- [Настройка проекта](docs/SETUP.md) - подробная документация по настройке и использованию
+
+- [Руководство по контрибьюции](docs/CONTRIBUTING.md) - конвенции коммитов и правила разработки
 
 ## Разработка
 
@@ -58,6 +60,10 @@ pnpm test
 # Storybook
 pnpm storybook
 ```
+
+## Конвенции коммитов
+
+Проект использует [Conventional Commits](https://www.conventionalcommits.org/). Подробности в [CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 ## Лицензия
 
