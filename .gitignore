@@ -1,0 +1,5 @@
+node
+pnpm-
+.env*
+.vercel
+node_modules

@@ -1,0 +1,10 @@
+* text=auto eol=lf
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
+*.svelte text
+*.ts text
+*.js text
+*.json text
+*.md text
+*.css text
+*.html text
