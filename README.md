@@ -1,38 +1,64 @@
-# sv
+# SveltePot
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Современное SvelteKit приложение с TypeScript, ESLint, Prettier, Husky, и CI/CD.
 
-## Creating a project
+## Быстрый старт
 
-If you're seeing this, you've probably already done this step. Congrats!
+```bash
+# Установка зависимостей
+pnpm install
 
-```sh
-# create a new project in the current directory
-npx sv create
+# Запуск в режиме разработки
+pnpm dev
 
-# create a new project in my-app
-npx sv create my-app
+# Сборка для продакшена
+pnpm build
 ```
 
-## Developing
+## Технологии
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- **SvelteKit** - фреймворк для веб-приложений
+- **TypeScript** - типизированный JavaScript
+- **ESLint + Prettier** - линтинг и форматирование кода
+- **Husky + lint-staged** - pre-commit хуки
+- **GitHub Actions** - CI/CD pipeline
+- **Drizzle ORM** - работа с базой данных
+- **Tailwind CSS** - стилизация
+- **Storybook** - разработка компонентов
 
-```sh
-npm run dev
+## CI/CD
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+Проект использует GitHub Actions для автоматической проверки кода:
+
+- **Lint** - проверка кода с помощью ESLint
+- **Typecheck** - проверка типов TypeScript
+- **Build** - сборка проекта
+
+Все проверки должны пройти успешно перед слиянием PR в main ветку.
+
+## Документация
+
+Подробная документация по настройке и использованию проекта находится в [docs/SETUP.md](docs/SETUP.md).
+
+## Разработка
+
+```bash
+# Проверка кода
+pnpm lint
+
+# Проверка типов
+pnpm typecheck
+
+# Форматирование
+pnpm format
+
+# Тестирование
+pnpm test
+
+# Storybook
+pnpm storybook
 ```
 
-## Building
+## Лицензия
 
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+MIT
