@@ -1198,7 +1198,10 @@ function destroy_effect(effect, remove_dom = true) {
 function remove_effect_dom(node, end) {
 	while (node !== null) {
 		var next =
-			node === end ? null : /** @type {TemplateNode} */ /* @__PURE__ */ get_next_sibling(node);
+			node === end
+				? null
+				: /** @type {TemplateNode} */
+					/* @__PURE__ */ get_next_sibling(node);
 		node.remove();
 		node = next;
 	}
@@ -2170,7 +2173,7 @@ const options = {
 			message +
 			'</h1>\n			</div>\n		</div>\n	</body>\n</html>\n'
 	},
-	version_hash: '1qqkvjx'
+	version_hash: '1buvjtc'
 };
 async function get_hooks() {
 	let handle;
