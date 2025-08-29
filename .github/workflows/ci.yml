@@ -36,11 +36,8 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
 
-      - name: Enable corepack (pnpm)
-        run: corepack enable
-
-      - name: Prepare pnpm
-        run: corepack prepare pnpm@latest --activate
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Derive cache prefix
         id: derive-cache-prefix
@@ -59,8 +56,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-      - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
+      - run: npm install -g pnpm
       - run: pnpm install --frozen-lockfile
       - name: eslint
         run: pnpm lint
@@ -75,8 +71,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-      - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
+      - run: npm install -g pnpm
       - run: pnpm install --frozen-lockfile
       - name: svelte-check
         run: pnpm typecheck
@@ -91,8 +86,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
-      - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
+      - run: npm install -g pnpm
       - run: pnpm install --frozen-lockfile
       - name: vite build
         run: pnpm build
