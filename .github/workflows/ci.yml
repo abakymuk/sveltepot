@@ -18,6 +18,7 @@ concurrency:
 
 env:
   CI: true
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
   # Общая стратегия установки окружения (reusable через steps)
