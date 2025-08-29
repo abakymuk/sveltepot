@@ -1,2 +1,2 @@
-const BROWSER = false;
-export { BROWSER as B };
+const DEV = false;
+export { DEV as D };

@@ -3,6 +3,8 @@ import {
 	B as BOUNDARY_EFFECT,
 	E as ERROR_VALUE,
 	a as EFFECT_RAN,
+	d as define_property,
+	r as run_all,
 	U as UNOWNED,
 	M as MAYBE_DIRTY,
 	C as CLEAN,
@@ -11,45 +13,41 @@ import {
 	b as EFFECT,
 	A as ASYNC,
 	c as BLOCK_EFFECT,
-	d as DIRTY,
-	e as BRANCH_EFFECT,
+	e as DIRTY,
+	f as deferred,
+	g as BRANCH_EFFECT,
 	R as ROOT_EFFECT,
-	f as DESTROYED,
-	g as INSPECT_EFFECT,
+	h as DESTROYED,
+	i as INSPECT_EFFECT,
 	S as STATE_SYMBOL,
-	h as UNINITIALIZED,
-	i as EFFECT_PRESERVED,
-	j as HEAD_EFFECT,
-	k as EFFECT_TRANSPARENT,
-	l as STALE_REACTION,
-	m as USER_EFFECT,
-	n as DISCONNECTED,
-	o as REACTION_IS_UPDATING,
-	p as COMMENT_NODE,
-	q as HYDRATION_START,
-	r as HYDRATION_END,
-	L as LEGACY_PROPS,
-	s as render,
-	t as push$1,
-	u as setContext,
-	v as pop$1
-} from './index.js';
-import { B as BROWSER } from './false.js';
-import {
-	d as define_property,
-	r as run_all,
-	a as deferred,
-	s as safe_equals,
-	e as equals,
 	o as object_prototype,
-	b as array_prototype,
-	g as get_descriptor,
-	c as get_prototype_of,
-	i as is_array,
-	f as is_extensible,
-	h as index_of,
-	j as array_from
-} from './equality.js';
+	j as array_prototype,
+	k as UNINITIALIZED,
+	l as get_descriptor,
+	m as get_prototype_of,
+	n as is_array,
+	p as is_extensible,
+	q as EFFECT_PRESERVED,
+	s as HEAD_EFFECT,
+	t as EFFECT_TRANSPARENT,
+	u as STALE_REACTION,
+	v as USER_EFFECT,
+	w as DISCONNECTED,
+	x as REACTION_IS_UPDATING,
+	y as index_of,
+	z as COMMENT_NODE,
+	F as HYDRATION_START,
+	G as HYDRATION_END,
+	J as array_from,
+	K as is_passive_event,
+	L as LEGACY_PROPS,
+	N as render,
+	O as push$1,
+	P as setContext,
+	Q as pop$1
+} from './index.js';
+import { D as DEV } from './false.js';
+import { s as safe_equals, e as equals } from './equality.js';
 import 'clsx';
 import './environment.js';
 let private_env = {};
@@ -590,7 +588,7 @@ function flush_effects() {
 			var batch = Batch.ensure();
 			if (flush_count++ > 1e3) {
 				var updates, entry;
-				if (BROWSER);
+				if (DEV);
 				infinite_loop_guard();
 			}
 			batch.process(queued_root_effects);
@@ -1551,7 +1549,7 @@ function update_effect(effect) {
 		effect.teardown = typeof teardown === 'function' ? teardown : null;
 		effect.wv = write_version;
 		var dep;
-		if (BROWSER && tracing_mode_flag && (effect.f & DIRTY) !== 0 && effect.deps !== null);
+		if (DEV && tracing_mode_flag && (effect.f & DIRTY) !== 0 && effect.deps !== null);
 	} finally {
 		is_updating_effect = was_updating_effect;
 		active_effect = previous_effect;
@@ -1649,10 +1647,6 @@ function depends_on_old_values(derived) {
 const STATUS_MASK = -7169;
 function set_signal_status(signal, status) {
 	signal.f = (signal.f & STATUS_MASK) | status;
-}
-const PASSIVE_EVENTS = ['touchstart', 'touchmove'];
-function is_passive_event(name) {
-	return PASSIVE_EVENTS.includes(name);
 }
 const all_registered_events = /* @__PURE__ */ new Set();
 const root_event_handles = /* @__PURE__ */ new Set();
@@ -2173,7 +2167,7 @@ const options = {
 			message +
 			'</h1>\n			</div>\n		</div>\n	</body>\n</html>\n'
 	},
-	version_hash: '11oycty'
+	version_hash: '9vxuux'
 };
 async function get_hooks() {
 	let handle;

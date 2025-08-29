@@ -1,7 +1,11 @@
-import { e as escape_html } from '../../chunks/escaping.js';
+import {
+	W as noop,
+	X as getContext,
+	Y as escape_html,
+	Q as pop,
+	O as push
+} from '../../chunks/index.js';
 import 'clsx';
-import { x as getContext, v as pop, t as push } from '../../chunks/index.js';
-import { n as noop } from '../../chunks/equality.js';
 import '@sveltejs/kit/internal';
 import { w as writable } from '../../chunks/exports.js';
 import '../../chunks/utils.js';
