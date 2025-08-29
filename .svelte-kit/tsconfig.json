@@ -1,16 +1,33 @@
 {
 	"compilerOptions": {
 		"paths": {
-			"@": ["../src"],
-			"@/*": ["../src/*"],
-			"$lib": ["../src/lib"],
-			"$lib/*": ["../src/lib/*"],
-			"$app/types": ["./types/index.d.ts"]
+			"@": [
+				"../src"
+			],
+			"@/*": [
+				"../src/*"
+			],
+			"$lib": [
+				"../src/lib"
+			],
+			"$lib/*": [
+				"../src/lib/*"
+			],
+			"$app/types": [
+				"./types/index.d.ts"
+			]
 		},
-		"rootDirs": ["..", "./types"],
+		"rootDirs": [
+			"..",
+			"./types"
+		],
 		"verbatimModuleSyntax": true,
 		"isolatedModules": true,
-		"lib": ["esnext", "DOM", "DOM.Iterable"],
+		"lib": [
+			"esnext",
+			"DOM",
+			"DOM.Iterable"
+		],
 		"moduleResolution": "bundler",
 		"module": "esnext",
 		"noEmit": true,

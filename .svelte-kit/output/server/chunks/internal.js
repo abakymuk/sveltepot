@@ -2173,7 +2173,7 @@ const options = {
 			message +
 			'</h1>\n			</div>\n		</div>\n	</body>\n</html>\n'
 	},
-	version_hash: '1buvjtc'
+	version_hash: '1vcc19a'
 };
 async function get_hooks() {
 	let handle;
