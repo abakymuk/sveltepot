@@ -1,5 +1,29 @@
-import 'clsx';
-import { B as BROWSER } from './false.js';
+import { clsx as clsx$1 } from 'clsx';
+import { D as DEV } from './false.js';
+var is_array = Array.isArray;
+var index_of = Array.prototype.indexOf;
+var array_from = Array.from;
+var define_property = Object.defineProperty;
+var get_descriptor = Object.getOwnPropertyDescriptor;
+var object_prototype = Object.prototype;
+var array_prototype = Array.prototype;
+var get_prototype_of = Object.getPrototypeOf;
+var is_extensible = Object.isExtensible;
+const noop = () => {};
+function run_all(arr) {
+	for (var i = 0; i < arr.length; i++) {
+		arr[i]();
+	}
+}
+function deferred() {
+	var resolve;
+	var reject;
+	var promise = new Promise((res, rej) => {
+		resolve = res;
+		reject = rej;
+	});
+	return { promise, resolve, reject };
+}
 const DERIVED = 1 << 1;
 const EFFECT = 1 << 2;
 const BLOCK_EFFECT = 1 << 4;
@@ -37,7 +61,116 @@ function lifecycle_outside_component(name) {
 const HYDRATION_START = '[';
 const HYDRATION_END = ']';
 const HYDRATION_ERROR = {};
+const ELEMENT_IS_NAMESPACED = 1;
+const ELEMENT_PRESERVE_ATTRIBUTE_CASE = 1 << 1;
 const UNINITIALIZED = Symbol();
+const VOID_ELEMENT_NAMES = [
+	'area',
+	'base',
+	'br',
+	'col',
+	'command',
+	'embed',
+	'hr',
+	'img',
+	'input',
+	'keygen',
+	'link',
+	'meta',
+	'param',
+	'source',
+	'track',
+	'wbr'
+];
+function is_void(name) {
+	return VOID_ELEMENT_NAMES.includes(name) || name.toLowerCase() === '!doctype';
+}
+const DOM_BOOLEAN_ATTRIBUTES = [
+	'allowfullscreen',
+	'async',
+	'autofocus',
+	'autoplay',
+	'checked',
+	'controls',
+	'default',
+	'disabled',
+	'formnovalidate',
+	'hidden',
+	'indeterminate',
+	'inert',
+	'ismap',
+	'loop',
+	'multiple',
+	'muted',
+	'nomodule',
+	'novalidate',
+	'open',
+	'playsinline',
+	'readonly',
+	'required',
+	'reversed',
+	'seamless',
+	'selected',
+	'webkitdirectory',
+	'defer',
+	'disablepictureinpicture',
+	'disableremoteplayback'
+];
+function is_boolean_attribute(name) {
+	return DOM_BOOLEAN_ATTRIBUTES.includes(name);
+}
+const PASSIVE_EVENTS = ['touchstart', 'touchmove'];
+function is_passive_event(name) {
+	return PASSIVE_EVENTS.includes(name);
+}
+const RAW_TEXT_ELEMENTS =
+	/** @type {const} */
+	['textarea', 'script', 'style', 'title'];
+function is_raw_text_element(name) {
+	return RAW_TEXT_ELEMENTS.includes(
+		/** @type {typeof RAW_TEXT_ELEMENTS[number]} */
+		name
+	);
+}
+const ATTR_REGEX = /[&"<]/g;
+const CONTENT_REGEX = /[&<]/g;
+function escape_html(value, is_attr) {
+	const str = String(value ?? '');
+	const pattern = is_attr ? ATTR_REGEX : CONTENT_REGEX;
+	pattern.lastIndex = 0;
+	let escaped = '';
+	let last = 0;
+	while (pattern.test(str)) {
+		const i = pattern.lastIndex - 1;
+		const ch = str[i];
+		escaped += str.substring(last, i) + (ch === '&' ? '&amp;' : ch === '"' ? '&quot;' : '&lt;');
+		last = i + 1;
+	}
+	return escaped + str.substring(last);
+}
+const replacements = {
+	translate: /* @__PURE__ */ new Map([
+		[true, 'yes'],
+		[false, 'no']
+	])
+};
+function attr(name, value, is_boolean = false) {
+	if (value == null || (!value && is_boolean)) return '';
+	const normalized = (name in replacements && replacements[name].get(value)) || value;
+	const assignment = is_boolean ? '' : `="${escape_html(normalized, true)}"`;
+	return ` ${name}${assignment}`;
+}
+function clsx(value) {
+	if (typeof value === 'object') {
+		return clsx$1(value);
+	} else {
+		return value ?? '';
+	}
+}
+function to_class(value, hash, directives) {
+	var classname = value == null ? '' : '' + value;
+	return classname === '' ? null : classname;
+}
 var current_component = null;
 function getContext(key) {
 	const context_map = get_or_init_context_map();
@@ -82,6 +215,7 @@ function get_parent_context(component_context) {
 }
 const BLOCK_OPEN = `<!--${HYDRATION_START}-->`;
 const BLOCK_CLOSE = `<!--${HYDRATION_END}-->`;
+const EMPTY_COMMENT = `<!---->`;
 class HeadPayload {
 	/** @type {Set<{ hash: string; code: string }>} */
 	css = /* @__PURE__ */ new Set();
@@ -121,6 +255,24 @@ function abort() {
 	controller?.abort(STALE_REACTION);
 	controller = null;
 }
+const INVALID_ATTR_NAME_CHAR_REGEX =
+	/[\s'">/=\u{FDD0}-\u{FDEF}\u{FFFE}\u{FFFF}\u{1FFFE}\u{1FFFF}\u{2FFFE}\u{2FFFF}\u{3FFFE}\u{3FFFF}\u{4FFFE}\u{4FFFF}\u{5FFFE}\u{5FFFF}\u{6FFFE}\u{6FFFF}\u{7FFFE}\u{7FFFF}\u{8FFFE}\u{8FFFF}\u{9FFFE}\u{9FFFF}\u{AFFFE}\u{AFFFF}\u{BFFFE}\u{BFFFF}\u{CFFFE}\u{CFFFF}\u{DFFFE}\u{DFFFF}\u{EFFFE}\u{EFFFF}\u{FFFFE}\u{FFFFF}\u{10FFFE}\u{10FFFF}]/u;
+function element(payload, tag, attributes_fn = noop, children_fn = noop) {
+	payload.out.push('<!---->');
+	if (tag) {
+		payload.out.push(`<${tag}`);
+		attributes_fn();
+		payload.out.push(`>`);
+		if (!is_void(tag)) {
+			children_fn();
+			if (!is_raw_text_element(tag)) {
+				payload.out.push(EMPTY_COMMENT);
+			}
+			payload.out.push(`</${tag}>`);
+		}
+	}
+	payload.out.push('<!---->');
+}
 let on_destroy = [];
 function render(component, options = {}) {
 	try {
@@ -129,7 +281,7 @@ function render(component, options = {}) {
 		on_destroy = [];
 		payload.out.push(BLOCK_OPEN);
 		let reset_reset_element;
-		if (BROWSER);
+		if (DEV);
 		if (options.context) {
 			push();
 			current_component.c = options.context;
@@ -164,41 +316,115 @@ function head(payload, fn) {
 	fn(head_payload);
 	head_payload.out.push(BLOCK_CLOSE);
 }
+function spread_attributes(attrs, css_hash, classes, styles, flags = 0) {
+	if (attrs.class) {
+		attrs.class = clsx(attrs.class);
+	}
+	let attr_str = '';
+	let name;
+	const is_html = (flags & ELEMENT_IS_NAMESPACED) === 0;
+	const lowercase = (flags & ELEMENT_PRESERVE_ATTRIBUTE_CASE) === 0;
+	for (name in attrs) {
+		if (typeof attrs[name] === 'function') continue;
+		if (name[0] === '$' && name[1] === '$') continue;
+		if (INVALID_ATTR_NAME_CHAR_REGEX.test(name)) continue;
+		var value = attrs[name];
+		if (lowercase) {
+			name = name.toLowerCase();
+		}
+		attr_str += attr(name, value, is_html && is_boolean_attribute(name));
+	}
+	return attr_str;
+}
+function spread_props(props) {
+	const merged_props = {};
+	let key;
+	for (let i = 0; i < props.length; i++) {
+		const obj = props[i];
+		for (key in obj) {
+			const desc = Object.getOwnPropertyDescriptor(obj, key);
+			if (desc) {
+				Object.defineProperty(merged_props, key, desc);
+			} else {
+				merged_props[key] = obj[key];
+			}
+		}
+	}
+	return merged_props;
+}
+function attr_class(value, hash, directives) {
+	var result = to_class(value);
+	return result ? ` class="${escape_html(result, true)}"` : '';
+}
+function bind_props(props_parent, props_now) {
+	for (const key in props_now) {
+		const initial_value = props_parent[key];
+		const value = props_now[key];
+		if (
+			initial_value === void 0 &&
+			value !== void 0 &&
+			Object.getOwnPropertyDescriptor(props_parent, key)?.set
+		) {
+			props_parent[key] = value;
+		}
+	}
+}
 export {
+	element as $,
 	ASYNC as A,
 	BOUNDARY_EFFECT as B,
 	CLEAN as C,
 	DERIVED as D,
 	ERROR_VALUE as E,
+	HYDRATION_START as F,
+	HYDRATION_END as G,
 	HYDRATION_ERROR as H,
 	INERT as I,
+	array_from as J,
+	is_passive_event as K,
 	LEGACY_PROPS as L,
 	MAYBE_DIRTY as M,
+	render as N,
+	push as O,
+	setContext as P,
+	pop as Q,
 	ROOT_EFFECT as R,
 	STATE_SYMBOL as S,
+	head as T,
 	UNOWNED as U,
+	attr as V,
+	noop as W,
+	getContext as X,
+	escape_html as Y,
+	spread_attributes as Z,
+	clsx as _,
 	EFFECT_RAN as a,
+	attr_class as a0,
+	bind_props as a1,
+	spread_props as a2,
 	EFFECT as b,
 	BLOCK_EFFECT as c,
-	DIRTY as d,
-	BRANCH_EFFECT as e,
-	DESTROYED as f,
-	INSPECT_EFFECT as g,
-	UNINITIALIZED as h,
-	EFFECT_PRESERVED as i,
-	HEAD_EFFECT as j,
-	EFFECT_TRANSPARENT as k,
-	STALE_REACTION as l,
-	USER_EFFECT as m,
-	DISCONNECTED as n,
-	REACTION_IS_UPDATING as o,
-	COMMENT_NODE as p,
-	HYDRATION_START as q,
-	HYDRATION_END as r,
-	render as s,
-	push as t,
-	setContext as u,
-	pop as v,
-	head as w,
-	getContext as x
+	define_property as d,
+	DIRTY as e,
+	deferred as f,
+	BRANCH_EFFECT as g,
+	DESTROYED as h,
+	INSPECT_EFFECT as i,
+	array_prototype as j,
+	UNINITIALIZED as k,
+	get_descriptor as l,
+	get_prototype_of as m,
+	is_array as n,
+	object_prototype as o,
+	is_extensible as p,
+	EFFECT_PRESERVED as q,
+	run_all as r,
+	HEAD_EFFECT as s,
+	EFFECT_TRANSPARENT as t,
+	STALE_REACTION as u,
+	USER_EFFECT as v,
+	DISCONNECTED as w,
+	REACTION_IS_UPDATING as x,
+	index_of as y,
+	COMMENT_NODE as z
 };

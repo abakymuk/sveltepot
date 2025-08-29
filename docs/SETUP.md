@@ -1,129 +1,161 @@
-# Настройка проекта SveltePot
+# SveltePot Project Setup
 
-## Требования
+## Overview
 
-- Node.js LTS (версия указана в `.nvmrc`)
-- pnpm (рекомендуется последняя версия)
+SveltePot is a modern SvelteKit application with TypeScript, ESLint, Prettier, Husky, and comprehensive CI/CD setup.
 
-## Установка и запуск
+## Technologies
 
-1. **Установка зависимостей:**
+- **Framework**: SvelteKit 2.x
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + Flowbite-Svelte
+- **Database**: Neon PostgreSQL with Drizzle ORM
+- **Authentication**: Stack Auth
+- **Package Manager**: pnpm
+- **CI/CD**: GitHub Actions
+- **Testing**: Vitest + Playwright
+- **Storybook**: Component development
+
+## Quick Start
+
+1. **Clone and install dependencies**:
 
    ```bash
+   git clone <repository-url>
+   cd sveltepot
    pnpm install
    ```
 
-2. **Запуск в режиме разработки:**
+2. **Set up environment variables**:
+
+   ```bash
+   cp .env.example .env
+   # Fill in your environment variables
+   ```
+
+3. **Start development server**:
+
    ```bash
    pnpm dev
    ```
-   Приложение будет доступно по адресу: http://localhost:5173
 
-## Команды разработки
+4. **Open the application**:
+   - Main app: http://localhost:5173
+   - UI Playground: http://localhost:5173/playground/ui
 
-### Основные команды
+## Development Commands
 
-- `pnpm dev` - запуск сервера разработки
-- `pnpm build` - сборка проекта для продакшена
-- `pnpm preview` - предварительный просмотр собранного проекта
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm preview` - Preview production build
+- `pnpm lint` - Run ESLint
+- `pnpm typecheck` - Run TypeScript checks
+- `pnpm format` - Format code with Prettier
+- `pnpm test` - Run tests
+- `pnpm storybook` - Start Storybook
 
-### Качество кода
+## UI Stack (Tailwind + Flowbite-Svelte)
 
-- `pnpm lint` - проверка кода с помощью ESLint
-- `pnpm format` - форматирование кода с помощью Prettier
-- `pnpm typecheck` - проверка типов TypeScript и Svelte
+### Setup
 
-### Тестирование
+1. **Install packages**:
 
-- `pnpm test:unit` - запуск unit-тестов
-- `pnpm test:e2e` - запуск end-to-end тестов
-- `pnpm test` - запуск всех тестов
+   ```bash
+   pnpm add -D tailwindcss postcss autoprefixer
+   pnpm add flowbite-svelte flowbite
+   npx tailwindcss init -p
+   ```
 
-### База данных
+2. **Verify configuration**:
+   - `tailwind.config.js` → content paths include flowbite-svelte and flowbite
+   - `postcss.config.js` → includes tailwindcss and autoprefixer
+   - `src/app.css` → contains @tailwind directives
 
-- `pnpm db:push` - отправка схемы в базу данных
-- `pnpm db:generate` - генерация миграций
-- `pnpm db:migrate` - применение миграций
-- `pnpm db:studio` - запуск Drizzle Studio
+3. **Import styles**:
+   - Ensure `app.css` is imported in `src/routes/+layout.svelte`
 
-### Storybook
+4. **Test components**:
+   - Open `/playground/ui` and verify components are visible
+   - Test dark/light mode toggle
+   - Verify responsive design
 
-- `pnpm storybook` - запуск Storybook
-- `pnpm build-storybook` - сборка Storybook
+### Features
 
-## CI & Required checks
+- **Dark Mode**: Toggle between light and dark themes
+- **Responsive Design**: Mobile-first approach
+- **Component Library**: Flowbite-Svelte components
+- **Custom Styling**: Tailwind utility classes
 
-В проекте настроен GitHub Actions CI с тремя проверками: **Lint**, **Typecheck**, **Build**. Pull Request может быть смержен только если все проверки пройдены успешно.
+## CI/CD Pipeline
 
-### CI Pipeline
+The project uses GitHub Actions for continuous integration:
 
-- **Lint** - проверка кода с помощью ESLint
-- **Typecheck** - проверка типов с помощью svelte-check
-- **Build** - сборка проекта для продакшена
+### Workflow Jobs
 
-### Настройки CI
-
-- Node версия автоматически берётся из `.nvmrc`
-- Пакетный менеджер pnpm используется через corepack
-- Кэширование зависимостей для ускорения сборки
-- Артефакт сборки сохраняется для диагностики
+1. **Setup**: Installs dependencies and caches them
+2. **Lint**: Runs ESLint on all TypeScript and Svelte files
+3. **Typecheck**: Runs Svelte type checking
+4. **Build**: Builds the application for production
 
 ### Branch Protection
 
-Ветка `main` защищена следующими правилами:
+Configure branch protection rules in GitHub:
 
-- Требуется Pull Request перед слиянием
-- Обязательные статус-чеки: Lint, Typecheck, Build
-- Все проверки должны пройти успешно
+- Settings → Branches → Branch protection rules → main
+- ✅ Require a pull request before merging
+- ✅ Require status checks: Lint, Typecheck, Build
 
-## Pre-commit хуки
-
-Проект настроен с Husky и lint-staged для автоматической проверки кода перед коммитом:
-
-- **ESLint** - проверка синтаксиса и стиля кода
-- **Prettier** - автоматическое форматирование
-- **svelte-check** - проверка типов Svelte
-
-При ошибках в линте или типах коммит будет заблокирован.
-
-### Как исправить ошибки линта/типов
-
-1. **Автоматическое исправление:**
-
-   ```bash
-   pnpm lint --fix
-   pnpm format
-   ```
-
-2. **Ручное исправление:**
-   - Исправьте ошибки ESLint в указанных файлах
-   - Убедитесь, что все типы корректны
-   - Запустите `pnpm typecheck` для проверки
-
-## Структура проекта
+## Project Structure
 
 ```
 src/
-├── lib/           # Общие библиотеки и утилиты
-├── routes/        # Маршруты SvelteKit
-├── app.html       # HTML шаблон
-└── app.css        # Глобальные стили
+├── lib/
+│   ├── server/
+│   │   ├── auth.ts
+│   │   └── db/
+│   │       ├── index.ts
+│   │       └── schema.ts
+│   └── assets/
+├── routes/
+│   ├── +layout.svelte
+│   ├── +page.svelte
+│   └── playground/
+│       └── ui/
+│           └── +page.svelte
+└── stories/
+    ├── Button.svelte
+    ├── Header.svelte
+    └── Page.svelte
 ```
 
-## Использование алиаса @/
+## Contributing
 
-В проекте настроен алиас `@/` для директории `src/`:
+1. Create a feature branch from `main`
+2. Make your changes
+3. Run local checks: `pnpm lint && pnpm typecheck && pnpm build`
+4. Create a pull request
+5. Ensure all CI checks pass
 
-```typescript
-// Вместо
-import { something } from '../../../lib/utils';
+## Environment Variables
 
-// Используйте
-import { something } from '@/lib/utils';
-```
+Required environment variables:
 
-Алиас работает в:
+- `DATABASE_URL` - Neon PostgreSQL connection string
+- `VITE_STACK_PROJECT_ID` - Stack Auth project ID
+- `VITE_STACK_PUBLISHABLE_CLIENT_KEY` - Stack Auth client key
+- `STACK_SECRET_SERVER_KEY` - Stack Auth server key
 
-- TypeScript файлах
-- Svelte компонентах
-- Vite конфигурации
+## Troubleshooting
+
+### Common Issues
+
+1. **pnpm not found in CI**: Ensure `pnpm/action-setup@v2` is used before `actions/setup-node@v4`
+2. **TypeScript errors**: Run `pnpm typecheck` to identify issues
+3. **Build failures**: Check environment variables and database connection
+4. **Styling issues**: Verify Tailwind configuration and Flowbite setup
+
+### Getting Help
+
+- Check the [SvelteKit documentation](https://kit.svelte.dev/)
+- Review [Tailwind CSS docs](https://tailwindcss.com/)
+- Explore [Flowbite-Svelte components](https://flowbite-svelte.com/)
