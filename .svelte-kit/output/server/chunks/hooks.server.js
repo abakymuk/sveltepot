@@ -76,11 +76,6 @@ function deleteSessionTokenCookie(event) {
 		path: '/'
 	});
 }
-const handleParaglide = ({ event, resolve }) => {
-	return resolve(event, {
-		transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', 'en')
-	});
-};
 const handleAuth = async ({ event, resolve }) => {
 	const sessionToken = event.cookies.get(sessionCookieName);
 	if (!sessionToken) {
@@ -98,5 +93,5 @@ const handleAuth = async ({ event, resolve }) => {
 	event.locals.session = session2;
 	return resolve(event);
 };
-const handle = sequence(handleParaglide, handleAuth);
+const handle = sequence(handleAuth);
 export { handle };

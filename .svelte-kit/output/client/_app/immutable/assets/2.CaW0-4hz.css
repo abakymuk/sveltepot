@@ -1,0 +1,33 @@
+h1.svelte-19t2vx0 {
+	color: #ff3e00;
+	font-size: 2.5em;
+	font-weight: 100;
+	margin: 0;
+	text-align: center;
+}
+p.svelte-19t2vx0 {
+	text-align: center;
+	margin: 1em 0;
+}
+.features.svelte-19t2vx0 {
+	max-width: 600px;
+	margin: 2em auto;
+	padding: 1em;
+	background: #f4f4f4;
+	border-radius: 8px;
+}
+.features.svelte-19t2vx0 h2:where(.svelte-19t2vx0) {
+	color: #333;
+	margin-bottom: 0.5em;
+}
+.features.svelte-19t2vx0 ul:where(.svelte-19t2vx0) {
+	list-style: none;
+	padding: 0;
+}
+.features.svelte-19t2vx0 li:where(.svelte-19t2vx0) {
+	padding: 0.5em 0;
+	border-bottom: 1px solid #ddd;
+}
+.features.svelte-19t2vx0 li:where(.svelte-19t2vx0):last-child {
+	border-bottom: none;
+}
